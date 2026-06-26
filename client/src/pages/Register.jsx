@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff, GraduationCap, ArrowRight } from 'lucide-react';
-import { registerUser } from '../services/api';
+import { registerUser, googleLogin } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -17,6 +17,43 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    /* global google */
+    if (window.google) {
+      window.google.accounts.id.initialize({
+        client_id: '294705223499-7ae1g82nb0nm0238gc5sna3udj2ieeeh.apps.googleusercontent.com',
+        callback: handleGoogleLogin,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById('google-signup-btn'),
+        {
+          theme: 'outline',
+          size: 'large',
+          text: 'signup_with',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          width: '320',
+        }
+      );
+    }
+  }, []);
+
+  const handleGoogleLogin = async (response) => {
+    setError('');
+    setLoading(true);
+
+    try {
+      const { data } = await googleLogin(response.credential);
+      login(data.token, data.user);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Google Sign-Up failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -182,6 +219,19 @@ const Register = () => {
               )}
             </motion.button>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-[#0f172a] px-2 text-surface-200/40">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <div id="google-signup-btn" className="w-full flex justify-center"></div>
+          </div>
         </div>
 
         <p className="text-center text-sm text-surface-200/40 mt-6">

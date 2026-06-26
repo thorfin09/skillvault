@@ -18,6 +18,7 @@ API.interceptors.request.use((config) => {
 export const registerUser = (data) => API.post('/auth/register', data);
 export const loginUser = (data) => API.post('/auth/login', data);
 export const getMe = () => API.get('/auth/me');
+export const googleLogin = (credential) => API.post('/auth/google-login', { credential });
 
 // Courses API
 export const getCourses = async (params = {}) => {

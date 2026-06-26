@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema(
       default: '',
       maxlength: [300, 'Bio cannot exceed 300 characters'],
     },
+    googleId: {
+      type: String,
+      default: '',
+    },
     enrolledCourses: [
       {
         course: {
