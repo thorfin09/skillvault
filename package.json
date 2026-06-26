@@ -1,0 +1,16 @@
+{
+  "name": "skillvault",
+  "version": "1.0.0",
+  "description": "SkillVault — Premium course selling platform (MERN + TailwindCSS)",
+  "scripts": {
+    "dev": "concurrently -k -n SERVER,CLIENT -c blue,magenta \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
