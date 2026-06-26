@@ -2,7 +2,7 @@ import axios from 'axios';
 import { MOCK_COURSES, MOCK_CATEGORIES } from './mockData';
 
 const API = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
 });
 
 // Attach JWT token to every request if available
